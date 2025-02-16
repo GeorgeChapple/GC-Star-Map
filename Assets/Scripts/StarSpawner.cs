@@ -6,12 +6,15 @@ using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class StarSpawner : MonoBehaviour
 {
+    [SerializeField] private Slider starsSlider;
+    [SerializeField] private Slider boundsSlider;
+    [SerializeField] private TextMeshProUGUI starsSliderText;
+    [SerializeField] private TextMeshProUGUI boundsSliderText;
     [SerializeField] private GameObject templateStar;
-    [SerializeField] private GameObject starsSlider;
-    [SerializeField] private GameObject starsSliderText;
     [SerializeField] private GameObject enumDropDown;
     [SerializeField] private int starCollideMagnitude;
     private List<String> firstNames = new List<String>();
@@ -22,12 +25,21 @@ public class StarSpawner : MonoBehaviour
     public float[] bounds = new float[6]; // Lower XYZ, Higher XYZ
     public bool allowInput;
 
-
     // Start is called before the first frame update
     private void Start() {
         //Set up playerprefs and get star names from files.
         stars = PlayerPrefs.GetInt("stars");
-        starsSliderText.GetComponent<TextMeshProUGUI>().text = "Star Count: " + Convert.ToString(PlayerPrefs.GetInt("stars"));
+        starsSlider.value = stars;
+        starsSliderText.text = "Star Count: " + Convert.ToString(PlayerPrefs.GetInt("stars"));
+        boundsSlider.value = PlayerPrefs.GetInt("bounds");
+        boundsSliderText.text = "Bounds: " + Convert.ToString(PlayerPrefs.GetInt("bounds"));
+        for (int i = 0; i < bounds.Length; i++) {
+            int newValue = PlayerPrefs.GetInt("bounds");
+            if (i <= 2) {
+                newValue *= -1;
+            }
+            bounds[i] = newValue;    
+        }
         foreach (string line in File.ReadLines("FirstNames.txt")) {
             firstNames.Add(line);
         }
@@ -38,9 +50,15 @@ public class StarSpawner : MonoBehaviour
     }
 
     //On slider change update text and playerprefs.
-    public void SliderChange(int value) {
-        PlayerPrefs.SetInt("stars", Convert.ToInt32(starsSlider.GetComponent<Slider>().value));
-        starsSliderText.GetComponent<TextMeshProUGUI>().text = "Star Count: " + Convert.ToString(PlayerPrefs.GetInt("stars"));
+    public void StarSliderChange() {
+        PlayerPrefs.SetInt("stars", Convert.ToInt32(starsSlider.value));
+        starsSliderText.text = "Star Count: " + Convert.ToString(PlayerPrefs.GetInt("stars"));
+    }
+
+    //On input box change, update bounds value playerprefs based on input box name.
+    public void BoundsSliderChange () {
+        PlayerPrefs.SetInt("bounds", Convert.ToInt32(boundsSlider.value));
+        boundsSliderText.text = "Bounds: " + Convert.ToString(PlayerPrefs.GetInt("bounds"));
     }
 
     //Swaps the scene to regenerate stars.
