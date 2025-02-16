@@ -9,11 +9,11 @@ public class StarLerpScript : MonoBehaviour
     private Color lerpColour;
     private int startIndex;
     private int nextIndex;
+    private bool sizeLerp;
+    public Vector3 pos;
     public float minLerpTime;
     public float maxLerpTime;
     public float sizeLerpTime;
-    public Vector3 pos;
-    private bool sizeLerp;
 
     //Pick random colours to lerp between and start lerping.
     private void Awake() {

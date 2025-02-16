@@ -1,26 +1,24 @@
 using TMPro;
 using UnityEngine;
 
-public class CameraControl : MonoBehaviour
+public class CameraControl : MonoBehaviour 
 {
+    [SerializeField] private GameObject selectedStarText;
+    [SerializeField] private GameObject selectedStartText;
+    [SerializeField] private GameObject selectedEndText;
+    [SerializeField] private GameObject starSpawner;
+    [SerializeField] private GameObject UI;
     [SerializeField] private float sensitivity;
     [SerializeField] private float speed;
     [SerializeField] LayerMask raycastMask;
-    private float xMouseInput;
-    private float yMouseInput;
     private Vector3 rotationXY;
     private Vector3 move;
     private bool moveCam;
     private bool UIOpen;
     private Camera cam;
     private RaycastHit hit;
-    [SerializeField] private GameObject selectedStarText;
     private Star selectedStart;
-    [SerializeField] private GameObject selectedStartText;
     private Star selectedEnd;
-    [SerializeField] private GameObject selectedEndText;
-    [SerializeField] private GameObject starSpawner;
-    [SerializeField] private GameObject UI;
 
     //Set camera start point based on bounds.
     private void Start() {

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Star : MonoBehaviour
 {
-    public Dictionary<Star, float> starRoutes = new Dictionary<Star, float>(); //Stores connections to other stars.
     [SerializeField] private LineRenderer linePrefab;
+    public Dictionary<Star, float> starRoutes = new Dictionary<Star, float>(); //Stores connections to other stars.
     public bool LineGenerated = false;
     public bool selected;
 

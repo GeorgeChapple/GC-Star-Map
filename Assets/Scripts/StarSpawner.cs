@@ -10,14 +10,14 @@ using UnityEngine.UI;
 public class StarSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject templateStar;
-    private int stars;
     [SerializeField] private GameObject starsSlider;
     [SerializeField] private GameObject starsSliderText;
-    [SerializeField] private int starCollideMagnitude;
     [SerializeField] private GameObject enumDropDown;
-    private int starFail;
+    [SerializeField] private int starCollideMagnitude;
     private List<String> firstNames = new List<String>();
     private List<String> lastNames = new List<String>();
+    private int starFail;
+    private int stars;
     public List<Star> allStars = new List<Star>();
     public float[] bounds = new float[6]; // Lower XYZ, Higher XYZ
     public bool allowInput;
