@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class PathFind : MonoBehaviour
 {
-    [SerializeField] private Sprite circleImage;
     [SerializeField] private TMP_Dropdown dropdownBox;
     [SerializeField] private LineRenderer pathLinePrefab;
     private LineRenderer pathLine;
@@ -30,7 +29,7 @@ public class PathFind : MonoBehaviour
         Vector3[] points = new Vector3[path.Count];
         for (int i = 0; i < path.Count; i++) {
             points[i] = path[i].transform.position;
-            newOptionData.Add(new TMP_Dropdown.OptionData(path[i].name, circleImage));
+            newOptionData.Add(new TMP_Dropdown.OptionData(path[i].name));
         }
         pathLine.positionCount = path.Count;
         pathLine.SetPositions(points);
