@@ -11,24 +11,22 @@ public class StarLerpScript : MonoBehaviour
     private int nextIndex;
     private bool sizeLerp;
     public Vector3 pos;
+    public Vector3 rot;
     public float minLerpTime;
     public float maxLerpTime;
     public float sizeLerpTime;
 
     //Pick random colours to lerp between and start lerping.
     private void Awake() {
-        starRenderer = GetComponent<Renderer>();
-        lerpColour = starRenderer.material.color;
-        if (colours != null) {
-            startIndex = Random.Range(1, colours.Length - 1);
-            lerpColour = colours[startIndex];
-            StartColourLerp();
+        if (gameObject.GetComponent<Star>() != null) {
+            starRenderer = GetComponent<Renderer>();
+            lerpColour = starRenderer.material.color;
+            if (colours != null) {
+                startIndex = Random.Range(1, colours.Length - 1);
+                lerpColour = colours[startIndex];
+                StartColourLerp();
+            }
         }
-    }
-
-    //Set material colour based on lerp.
-    private void Update() {
-        starRenderer.material.color = lerpColour;
     }
 
     //Lerps between the given colours.
@@ -40,6 +38,7 @@ public class StarLerpScript : MonoBehaviour
             lerpColour = LerpC(start, end, time);
             timeTaken += Time.deltaTime;
             time = timeTaken / timeToTake;
+            starRenderer.material.color = lerpColour;
             yield return null;
         }
         StartColourLerp();
@@ -59,6 +58,22 @@ public class StarLerpScript : MonoBehaviour
             yield return null;
         }
         transform.position = pos;
+    }
+
+    //Rotation Lerp.
+    private IEnumerator LerpRotation(Vector3 start, Vector3 end) {
+        float timeToTake = Random.Range(minLerpTime, maxLerpTime);
+        float time = 0;
+        float timeTaken = 0;
+        Vector3 lerpVector = start;
+        while (time < 1)  {
+            lerpVector = LerpV3(start, end, time);
+            timeTaken += Time.deltaTime;
+            time = timeTaken / timeToTake;
+            transform.eulerAngles = lerpVector;
+            yield return null;
+        }
+        transform.eulerAngles = rot;
     }
 
     //Lerps between the two given sizes when selected, then waits to be unselected, then lerps back.
@@ -118,7 +133,11 @@ public class StarLerpScript : MonoBehaviour
     public void StartPositionLerp() {
         StartCoroutine(LerpPosition(transform.position, pos));
     }
-    
+
+    public void StartRotationLerp() {
+        StartCoroutine(LerpRotation(transform.eulerAngles, rot));
+    }
+
     //Starts size lerp if size lerp is not already in progress.
     public void StartSizeLerp() {
         if (sizeLerp == false) {

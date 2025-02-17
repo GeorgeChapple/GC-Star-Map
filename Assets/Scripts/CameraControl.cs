@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,9 +9,9 @@ public class CameraControl : MonoBehaviour
     [SerializeField] private GameObject selectedEndText;
     [SerializeField] private GameObject starSpawner;
     [SerializeField] private GameObject UI;
+    [SerializeField] private GameObject dropdownBox;
     [SerializeField] private float sensitivity;
     [SerializeField] private float speed;
-    [SerializeField] LayerMask raycastMask;
     private Vector3 rotationXY;
     private Vector3 move;
     private bool moveCam;
@@ -19,6 +20,13 @@ public class CameraControl : MonoBehaviour
     private RaycastHit hit;
     private Star selectedStart;
     private Star selectedEnd;
+    private StarLerpScript lerpScript;
+
+    //Get lerp script.
+    private void Awake() {
+        lerpScript = GetComponent<StarLerpScript>();
+        lerpScript.rot = new Vector3(45f, 0f, 0f);
+    }
 
     //Set camera start point based on bounds.
     private void Start() {
@@ -84,6 +92,21 @@ public class CameraControl : MonoBehaviour
         move.x = Input.GetAxisRaw("Horizontal");
         move.z = Input.GetAxisRaw("Vertical");
         transform.Translate(move * speed * Time.deltaTime);
+    }
+
+    public void LerpCam() {
+        Star selectedStar =  null;
+        List<Star> pathList = starSpawner.GetComponent<PathFind>().path;
+        for (int i = 0; i < pathList.Count; i++) {
+            if (pathList[i].gameObject.name == dropdownBox.GetComponent<TextMeshProUGUI>().text) {
+                selectedStar = pathList[i];
+            }
+        }
+        if (selectedStar != null) {
+            lerpScript.pos = selectedStar.gameObject.transform.position + new Vector3(0,2,-2);
+            lerpScript.StartPositionLerp();
+            lerpScript.StartRotationLerp();
+        }
     }
 
     //Star selectors.

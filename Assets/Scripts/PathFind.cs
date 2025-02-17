@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PathFind : MonoBehaviour
 {
+    [SerializeField] private Sprite circleImage;
+    [SerializeField] private TMP_Dropdown dropdownBox;
     [SerializeField] private LineRenderer pathLinePrefab;
     private LineRenderer pathLine;
     public List<Star> path = new List<Star>();
@@ -20,12 +24,17 @@ public class PathFind : MonoBehaviour
     
     //Use the found path to create an array of points for the line renderer.
     private void DrawPath() {
+        dropdownBox.ClearOptions();
+        List<TMP_Dropdown.OptionData> newOptionData = new List<TMP_Dropdown.OptionData>();
+        newOptionData.Add(new TMP_Dropdown.OptionData("Select Course Planet"));
         Vector3[] points = new Vector3[path.Count];
         for (int i = 0; i < path.Count; i++) {
             points[i] = path[i].transform.position;
+            newOptionData.Add(new TMP_Dropdown.OptionData(path[i].name, circleImage));
         }
         pathLine.positionCount = path.Count;
         pathLine.SetPositions(points);
+        dropdownBox.AddOptions(newOptionData);
     }
 
     //Dijkstra's
